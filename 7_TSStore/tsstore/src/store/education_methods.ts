@@ -2,6 +2,7 @@ import { Module, ActionTree, MutationTree } from 'vuex';
 import { RootState } from './index.d';
 import { EMState, EducationMethod, LoadOptions } from './education_methods.d';
 import axios from 'axios';
+import { EventType } from '@/types/enums/education_method';
 
 const namespaced = true;
 
@@ -37,6 +38,9 @@ const actions: ActionTree<EMState, RootState> =
 const mutations: MutationTree<EMState> =
 {
     SET_ITEMS(state, payload: Array<EducationMethod>) {
+        payload.forEach(i => {
+            i.type = EventType.COURSE;
+        });
         state.items = payload;
     },
     FLUSH_ITEMS(state) {

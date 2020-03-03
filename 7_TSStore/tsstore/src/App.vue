@@ -1,7 +1,12 @@
 <template>
   <div id="app">
     <ul>
-      <li v-for="i in items" :key="i.id">{{i.name}}</li>
+      <template v-if="items.length>0">
+        <li v-for="i in items" :key="i.id">{{i.name}} > {{i.type | RuTypes}}</li>
+      </template>
+      <template v-else>
+        <li>No data</li>
+      </template>
     </ul>
     <button @click="loadData('1.json')">Load from 1 source</button>
     <button @click="loadData('2.json')">Load from 2 source</button>
@@ -12,6 +17,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mapActions, mapState } from 'vuex';
 import { EducationMethod, LoadOptions } from './store/education_methods.d';
+import { EventType } from "./types/enums/education_method";
 
 @Component({
   computed: {
@@ -19,6 +25,17 @@ import { EducationMethod, LoadOptions } from './store/education_methods.d';
   },
   methods: {
     ...mapActions('EducationMethods', ['getItems'])
+  },
+  filters: {
+    RuTypes: (val: EventType) => {
+      switch(val)
+      {
+        case EventType.EDUCATION_METHOD:
+          return "Программа";
+        case EventType.COURSE:
+          return "Курс";
+      }
+    }
   }
 })
 export default class App extends Vue {
